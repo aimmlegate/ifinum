@@ -1,2 +1,5 @@
-app: npm run build
-server: json-server --watch db.json
+app: 
+		npm run start
+		
+server: 
+		json-server --watch db.json

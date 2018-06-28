@@ -6,6 +6,8 @@
   "dependencies": {
     "antd": "^3.6.4",
     "axios": "^0.18.0",
+    "dayjs": "^1.6.10",
+    "lodash": "^4.17.10",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-redux": "^5.0.7",
@@ -14,8 +16,7 @@
     "redux-actions": "^2.3.0",
     "redux-form": "^7.3.0",
     "redux-thunk": "^2.2.0",
-    "reselect": "^3.0.1",
-    "lodash": "^4.17.10"
+    "reselect": "^3.0.1"
   },
   "scripts": {
     "start": "PORT=3001 react-scripts start",

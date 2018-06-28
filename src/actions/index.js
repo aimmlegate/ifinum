@@ -14,6 +14,7 @@ export const getInvoices = () => async (dispatch) => {
     );
     dispatch(getInvoicesSuccess(response.data));
   } catch (e) {
-    dispatch(getInvoicesFailure(e.message));
+    console.error(e);
+    dispatch(getInvoicesFailure());
   }
 };
