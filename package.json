@@ -1,7 +1,7 @@
 {
   "name": "ifinum",
   "version": "0.1.0",
-  "proxy": "http://localhost:3000",
+  "proxy": "http://localhost:4000",
   "private": true,
   "dependencies": {
     "antd": "^3.6.4",
@@ -21,11 +21,13 @@
     "redux-form-antd": "^3.0.0",
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "json-server": "^0.11.2"
   },
   "scripts": {
-    "start": "PORT=3001 react-scripts start",
+    "start": "react-scripts start & npm run apiserver",
     "build": "react-scripts build",
+    "apiserver": "json-server --watch --port 4000 api/db.json",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
