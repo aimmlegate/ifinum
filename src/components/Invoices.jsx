@@ -1,11 +1,35 @@
 import React, { Component } from 'react';
-import { Table, Spin, Alert } from 'antd';
-import dayjs from 'dayjs';
+import { Link } from 'react-router-dom';
+import { Table, Spin, Alert, Divider, Modal, Button } from 'antd';
+import moment from 'moment';
 import connect from '../connect';
 import { formatNumber } from '../helpers';
 
 
 class Invoices extends Component {
+  state = { visible: false }
+
+  showModal = key => () => {
+    this.setState({
+      visible: true,
+      modalId: key,
+    });
+  }
+
+  handleCancel = () => {
+    this.setState({
+      visible: false,
+      modalId: null,
+    });
+  }
+
+  handleOk = () => {
+    const { modalId } = this.state;
+    this.setState({ visible: false, modalId: null });
+    this.props.deleteInvoice(modalId);
+  }
+
+
   columns = () => [{
     title: 'Create',
     dataIndex: 'date_created',
@@ -22,10 +46,26 @@ class Invoices extends Component {
     key: 'date_supply',
     width: 100,
   }, {
+    title: 'Due',
+    dataIndex: 'date_due',
+    key: 'date_due',
+    width: 100,
+  }, {
     title: 'Comment',
     dataIndex: 'comment',
     key: 'comment',
     width: 200,
+  }, {
+    title: 'Action',
+    key: 'action',
+    width: 100,
+    render: record => (
+      <span>
+        <Link to={`/edit/${record.key}`}>Edit</Link>
+        <Divider type="vertical" />
+        <Button onClick={this.showModal(record.key)}>Delete</Button>
+      </span>
+    ),
   }];
 
   dataSource = () => {
@@ -34,12 +74,14 @@ class Invoices extends Component {
       const {
         date_created: dateCreate,
         date_supply: dateSupply,
+        date_due: dateDue,
         number,
         comment,
       } = invoicesById[id];
       return {
-        date_created: dayjs(dateCreate).format('DD-MM-YYYY'),
-        date_supply: dayjs(dateSupply).format('DD-MM-YYYY'),
+        date_created: moment(dateCreate, 'D MMMM YYYY', true).format('DD-MM-YYYY'),
+        date_supply: moment(dateSupply, 'D MMMM YYYY', true).format('DD-MM-YYYY'),
+        date_due: moment(dateDue, 'D MMMM YYYY', true).format('DD-MM-YYYY'),
         number: formatNumber(number),
         comment,
         key: id,
@@ -59,6 +101,14 @@ class Invoices extends Component {
               <Table dataSource={this.dataSource()} columns={this.columns()}/>
           }
         </Spin>
+        <Modal
+            title="Delete"
+            visible={this.state.visible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+          >
+          <p>Do you want to delete these items?</p>
+        </Modal>
       </div>
     );
   }

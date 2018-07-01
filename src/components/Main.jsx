@@ -1,4 +1,4 @@
-import { Layout, Divider, Button } from 'antd';
+import { Layout, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import React from 'react';
 import Invoices from './Invoices';
@@ -8,9 +8,7 @@ const { Content } = Layout;
 const Main = () =>
   <Layout style={{ minHeight: '100vh' }}>
     <Content style={{ padding: '20px' }}>
-      <Divider orientation="left">
-        <h1>Invoices</h1>
-      </Divider>
+      <h1>Invoices</h1>
       <div style={{ padding: '20px', background: '#fff', marginBottom: '20px' }}>
         <h3>Actions</h3>
         <Link to='/new'>

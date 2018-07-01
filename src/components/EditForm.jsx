@@ -9,10 +9,17 @@ import { unFormatNumber, formatNumber, checkUniqInvoice } from '../helpers';
 const { TextArea } = Input;
 const FormItem = Form.Item;
 
-class CreateForm extends React.Component {
-  componentDidUpdate() {
-    if (this.props.formStatus === 'reset') {
-      this.props.form.resetFields();
+class EditForm extends React.Component {
+  checkUniqInvoiceNumber = (rule, value, callback) => {
+    const { number } = this.props.invoicesById[this.props.id];
+    const unformatValue = unFormatNumber(value);
+    if (number === unformatValue) {
+      callback();
+    }
+    if (checkUniqInvoice(this.props.invoicesById, unformatValue)) {
+      callback('must be uniq');
+    } else {
+      callback();
     }
   }
 
@@ -35,32 +42,29 @@ class CreateForm extends React.Component {
         const request = {
           number: unFormatNumber(number),
           date_supply: moment(supplyDate).format('D MMMM YYYY'),
-          date_created: moment().format('D MMMM YYYY'),
           date_due: moment(dueDate).format('D MMMM YYYY'),
           comment,
         };
-        this.props.newInvoices(request);
+        const { id } = this.props;
+        this.props.editInvoice(id, request);
       }
     });
   }
 
-  checkUniqInvoiceNumber = (rule, value, callback) => {
-    const unformatValue = unFormatNumber(value);
-    if (checkUniqInvoice(this.props.invoicesById, unformatValue)) {
-      callback('must be uniq');
-    } else {
-      callback();
-    }
-  }
-
   render() {
-    if (this.props.status !== 'ok') {
+    if (this.props.status === 'loading') {
       return <div style={{ textAlign: 'center' }}><Spin/></div>;
     }
     if (this.props.status === 'error') {
       return <Alert message="Something went wrong" type="error" />;
     }
     const { getFieldDecorator } = this.props.form;
+    const {
+      number,
+      date_due: dateDue,
+      date_supply: dateSupply,
+      comment,
+    } = this.props.invoicesById[this.props.id];
     return (
       <div style={{ padding: '20px', background: '#fff' }}>
         <Form onSubmit={this.handleSubmit} style={{ padding: '20px', border: '1px solid #ebedf0' }}>
@@ -70,7 +74,7 @@ class CreateForm extends React.Component {
                 <FormItem label="Number:">
                   {
                     getFieldDecorator('number', {
-                      initialValue: formatNumber(this.props.newUniq),
+                      initialValue: formatNumber(number),
                       rules: [
                         { required: true },
                         { validator: this.checkUniqInvoiceNumber },
@@ -86,7 +90,10 @@ class CreateForm extends React.Component {
               <div style={{ marginBottom: '20px' }}>
                 <FormItem label="Date due:">
                   {
-                    getFieldDecorator('invoiceDate', { rules: [{ required: true }] })(<DatePicker locale={locale}
+                    getFieldDecorator('dueDate', {
+                      initialValue: moment(dateDue, 'D MMMM YYYY'),
+                      rules: [{ required: true }],
+                    })(<DatePicker locale={locale}
                       style={{ width: '100%' }}
                       name='dueDate'
                       label='Date due:'
@@ -99,7 +106,10 @@ class CreateForm extends React.Component {
               <div style={{ marginBottom: '20px' }}>
                 <FormItem label="Supply Date:">
                   {
-                    getFieldDecorator('supplyDate', { rules: [{ required: true }] })(<DatePicker locale={locale}
+                    getFieldDecorator('supplyDate', {
+                      initialValue: moment(dateSupply, 'D MMMM YYYY'),
+                      rules: [{ required: true }],
+                    })(<DatePicker locale={locale}
                       name='supplyDate'
                       style={{ width: '100%' }}
                       label='Supply Date:'
@@ -112,7 +122,7 @@ class CreateForm extends React.Component {
               <div style={{ marginBottom: '20px' }}>
                 <FormItem label="Comment:">
                   {
-                    getFieldDecorator('comment', { })(<TextArea
+                    getFieldDecorator('comment', { initialValue: comment })(<TextArea
                       name='comment'
                       placeholder="Text comment here"
                       autosize={{ minRows: 2, maxRows: 6 }}
@@ -137,7 +147,6 @@ export default connect(state =>
     invoicesById: state.invoices.byId,
     invoicesAllId: state.invoices.allId,
     formStatus: state.formStatus,
-    newUniq: state.invoices.newUniq,
     status: state.invoices.status,
-  }))(Form.create()(CreateForm));
+  }))(Form.create()(EditForm));
 

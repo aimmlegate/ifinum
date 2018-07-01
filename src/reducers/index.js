@@ -1,5 +1,5 @@
 import { reducer as formReducer } from 'redux-form';
-import { keyBy, uniqueId } from 'lodash';
+import { keyBy, uniqueId, omit } from 'lodash';
 import { handleActions } from 'redux-actions';
 import { combineReducers } from 'redux';
 import * as actions from '../actions';
@@ -8,7 +8,7 @@ import { uniqInvoiceNumber } from '../helpers';
 const defaultInvoicesState = {
   byId: {},
   allId: [],
-  status: '',
+  status: 'loading',
   newUniq: uniqueId(),
 };
 
@@ -21,7 +21,19 @@ const invoices = handleActions(
     [actions.getInvoicesRequest](state) {
       return { ...state, status: 'loading' };
     },
+    [actions.patchInvoiceRequest](state) {
+      return { ...state, status: 'loading' };
+    },
+    [actions.delInvoiceRequest](state) {
+      return { ...state, status: 'loading' };
+    },
     [actions.getInvoicesFailure](state) {
+      return { ...state, status: 'error' };
+    },
+    [actions.patchInvoiceFailure](state) {
+      return { ...state, status: 'error' };
+    },
+    [actions.delInvoicesFailure](state) {
       return { ...state, status: 'error' };
     },
     [actions.getInvoicesSuccess](state, { payload: payloadedInvoices }) {
@@ -44,6 +56,27 @@ const invoices = handleActions(
         byId: { ...byId, [id]: payloadedInvoice },
         status: 'ok',
         newUniq: uniqInvoiceNumber(byId),
+      };
+    },
+    [actions.patchInvoiceSuccess](state, { payload: payloadedInvoice }) {
+      const { id } = payloadedInvoice;
+      const { byId } = state;
+      return {
+        ...state,
+        byId: { ...byId, [id]: payloadedInvoice },
+        status: 'ok',
+        newUniq: uniqInvoiceNumber(byId),
+      };
+    },
+    [actions.delInvoicesSuccess](state, { payload: deletedId }) {
+      const { byId, allId } = state;
+      const removedInvoices = omit(byId, deletedId);
+      const removedInvoicesIds = allId.filter(id => (id !== deletedId.toString()));
+      return {
+        ...state,
+        status: 'ok',
+        allId: removedInvoicesIds,
+        byId: removedInvoices,
       };
     },
   },
