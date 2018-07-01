@@ -29,7 +29,8 @@
     "build": "react-scripts build",
     "apiserver": "json-server --watch --port 4000 api/db.json",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "eslint": "eslint"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
