@@ -1,18 +1,13 @@
-import { Layout } from 'antd';
 import React from 'react';
-import Invoices from './Invoices';
+import connect from '../connect';
+import Router from './Router';
 
-const { Content } = Layout;
+class App extends React.Component {
+  componentDidMount() {
+    this.props.getInvoices();
+  }
+  render = () => <Router/>
+}
 
-const App = () =>
-  <Layout style={{ minHeight: '100vh' }}>
-    <Content style={{ padding: '20px' }}>
-      <h1>Invoices</h1>
-      <Content style={{ padding: '20px', background: '#fff' }}>
-        <h3>Invoices</h3>
-        <Invoices />
-      </Content>
-    </Content>
-  </Layout>;
+export default connect()(App);
 
-export default App;
