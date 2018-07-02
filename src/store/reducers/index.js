@@ -3,7 +3,7 @@ import { keyBy, uniqueId, omit } from 'lodash';
 import { handleActions } from 'redux-actions';
 import { combineReducers } from 'redux';
 import * as actions from '../actions';
-import { uniqInvoiceNumber } from '../helpers';
+import { uniqInvoiceNumber } from './../../helpers';
 
 const defaultInvoicesState = {
   byId: {},
@@ -12,9 +12,7 @@ const defaultInvoicesState = {
   newUniq: uniqueId(),
 };
 
-const defaultFormState = {
-  formStatus: 'ok',
-};
+const defaultFormState = 'ok';
 
 const invoices = handleActions(
   {

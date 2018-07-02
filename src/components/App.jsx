@@ -1,5 +1,6 @@
 import React from 'react';
-import connect from '../connect';
+import PropTypes from 'prop-types';
+import connect from '../store/connect';
 import Router from './Router';
 
 class App extends React.Component {
@@ -8,6 +9,10 @@ class App extends React.Component {
   }
   render = () => <Router/>
 }
+
+App.propTypes = {
+  getInvoices: PropTypes.func,
+};
 
 export default connect()(App);
 

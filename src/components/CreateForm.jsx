@@ -1,8 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Row, Col, Form, Button, Icon, Input, DatePicker, Spin, Alert } from 'antd';
-import locale from 'antd/lib/date-picker/locale/en_GB';
-import connect from '../connect';
+import connect from '../store/connect';
 import { unFormatNumber, formatNumber, checkUniqInvoice } from '../helpers';
 
 
@@ -86,7 +86,7 @@ class CreateForm extends React.Component {
               <div style={{ marginBottom: '20px' }}>
                 <FormItem label="Date due:">
                   {
-                    getFieldDecorator('invoiceDate', { rules: [{ required: true }] })(<DatePicker locale={locale}
+                    getFieldDecorator('invoiceDate', { rules: [{ required: true }] })(<DatePicker
                       style={{ width: '100%' }}
                       name='dueDate'
                       label='Date due:'
@@ -99,7 +99,7 @@ class CreateForm extends React.Component {
               <div style={{ marginBottom: '20px' }}>
                 <FormItem label="Supply Date:">
                   {
-                    getFieldDecorator('supplyDate', { rules: [{ required: true }] })(<DatePicker locale={locale}
+                    getFieldDecorator('supplyDate', { rules: [{ required: true }] })(<DatePicker
                       name='supplyDate'
                       style={{ width: '100%' }}
                       label='Supply Date:'
@@ -131,6 +131,15 @@ class CreateForm extends React.Component {
     );
   }
 }
+
+CreateForm.propTypes = {
+  status: PropTypes.string,
+  formStatus: PropTypes.string,
+  invoicesById: PropTypes.object,
+  invoicesAllId: PropTypes.array,
+  newUniq: PropTypes.string,
+  newInvoices: PropTypes.func,
+};
 
 export default connect(state =>
   ({

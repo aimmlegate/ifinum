@@ -1,8 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Row, Col, Form, Button, Icon, Input, DatePicker, Spin, Alert } from 'antd';
-import locale from 'antd/lib/date-picker/locale/en_GB';
-import connect from '../connect';
+import connect from '../store/connect';
 import { unFormatNumber, formatNumber, checkUniqInvoice } from '../helpers';
 
 
@@ -93,10 +93,10 @@ class EditForm extends React.Component {
                     getFieldDecorator('dueDate', {
                       initialValue: moment(dateDue, 'D MMMM YYYY'),
                       rules: [{ required: true }],
-                    })(<DatePicker locale={locale}
-                      style={{ width: '100%' }}
-                      name='dueDate'
-                      label='Date due:'
+                    })(<DatePicker
+                        style={{ width: '100%' }}
+                        name='dueDate'
+                        label='Date due:'
                     />)
                   }
                 </FormItem>
@@ -109,10 +109,10 @@ class EditForm extends React.Component {
                     getFieldDecorator('supplyDate', {
                       initialValue: moment(dateSupply, 'D MMMM YYYY'),
                       rules: [{ required: true }],
-                    })(<DatePicker locale={locale}
-                      name='supplyDate'
-                      style={{ width: '100%' }}
-                      label='Supply Date:'
+                    })(<DatePicker
+                        name='supplyDate'
+                        style={{ width: '100%' }}
+                        label='Supply Date:'
                     />)
                   }
                 </FormItem>
@@ -141,6 +141,15 @@ class EditForm extends React.Component {
     );
   }
 }
+
+EditForm.propTypes = {
+  status: PropTypes.string,
+  formStatus: PropTypes.string,
+  invoicesById: PropTypes.object,
+  invoicesAllId: PropTypes.array,
+  newUniq: PropTypes.string,
+  editInvoice: PropTypes.func,
+};
 
 export default connect(state =>
   ({

@@ -6,9 +6,10 @@
   "dependencies": {
     "antd": "^3.6.4",
     "axios": "^0.18.0",
-    "dayjs": "^1.6.10",
+    "json-server": "^0.11.2",
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
+    "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-redux": "^5.0.7",
@@ -21,8 +22,7 @@
     "redux-form-antd": "^3.0.0",
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",
-    "uuid": "^3.3.2",
-    "json-server": "^0.11.2"
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "start": "react-scripts start & npm run apiserver",

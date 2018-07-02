@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Table, Spin, Alert, Divider, Modal, Button } from 'antd';
 import moment from 'moment';
-import connect from '../connect';
+import connect from '../store/connect';
 import { formatNumber } from '../helpers';
-
 
 class Invoices extends Component {
   state = { visible: false }
@@ -113,6 +113,12 @@ class Invoices extends Component {
     );
   }
 }
+
+Invoices.propTypes = {
+  status: PropTypes.string,
+  invoicesById: PropTypes.object,
+  deleteInvoice: PropTypes.func,
+};
 
 export default connect(state =>
   ({
